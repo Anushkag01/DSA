@@ -11,6 +11,7 @@ void display(struct node* tail);
 struct node* addAtBeg(struct node* tail,int data);
 struct node* addAtEnd(struct node* tail,int data);
 struct node* addAfterPos(struct node* tail,int data,int pos);
+struct node* add_At_Pos(struct node* tail,int data,int pos);
 struct node* create_list(struct node* tail);
 struct node* del_first(struct node* tail);
 struct node* del_last(struct node* tail);
@@ -58,6 +59,10 @@ int main()
     display(tail);
     printf("\n--------------\n");
 
+    tail=add_At_Pos(tail,99,1);
+    display(tail);
+    printf("\n--------------\n");
+
     tail=del_first(tail);
     display(tail);
     printf("\n--------------\n");
@@ -67,6 +72,18 @@ int main()
     printf("\n--------------\n");
 
     tail=del_AT_pos(tail,2);
+    display(tail);
+    printf("\n--------------\n");
+
+    tail=del_last(tail);
+    display(tail);
+    printf("\n--------------\n");
+
+    tail=del_last(tail);
+    display(tail);
+    printf("\n--------------\n");
+
+    tail=add_At_Pos(tail,99,1);
     display(tail);
     printf("\n--------------\n");
 
@@ -83,12 +100,16 @@ struct node* add_to_empty(int data)
 
 void display(struct node* tail)
 {
+    if(tail == NULL)
+        printf("\nEmpty list");
+    else{    
     struct node* p=tail->next;
     do
     {
         printf("%d ",p->data);
         p=p->next;
     } while (p!=tail->next);
+    }
 
 }
 
@@ -130,6 +151,42 @@ struct node* addAfterPos(struct node* tail,int data,int pos)
     return tail;
 }
 
+struct node* add_At_Pos(struct node* tail,int data,int pos)
+{
+    struct node* newp=add_to_empty(data);
+
+    if (tail==NULL)
+    {
+        tail=newp;
+        return tail;
+    }
+    if(pos==1)
+    {
+        newp->next=tail->next;
+        tail->next=newp;
+        return tail;
+    }
+
+    else
+    {
+        struct node *temp=tail->next;
+        struct node *temp2=NULL;
+
+        while(pos>1)
+        {
+            temp2=temp;
+            temp=temp->next;
+            pos--;
+        }
+        newp->next=temp;
+        temp2->next=newp;
+        
+        if(newp->next ==tail->next)
+            tail=newp;
+        return tail;
+    }
+}
+
 struct node* del_first(struct node* tail)
 {
     if(tail==NULL)
@@ -160,6 +217,7 @@ struct node* del_last(struct node* tail)
     }
     if(tail->next==tail)
     {
+        printf("last node");
         free(tail);
         tail=NULL;
         return tail;
